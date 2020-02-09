@@ -18,268 +18,193 @@
 */
 /*eslint-disable*/
 import React from "react";
+import axios from 'axios';
 // react plugin for creating notifications over the dashboard
-import NotificationAlert from "react-notification-alert";
 // reactstrap components
 import {
-  UncontrolledAlert,
-  Alert,
-  Button,
+	Button,
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   CardTitle,
+  FormGroup,
+  Form,
+  Input,
   Row,
   Col
 } from "reactstrap";
 
 class Notifications extends React.Component {
-  state = {
-    visible: true
-  };
-  notificationAlert = React.createRef();
-  notify(place) {
-    var color = Math.floor(Math.random() * 5 + 1);
-    var type;
-    switch (color) {
-      case 1:
-        type = "primary";
-        break;
-      case 2:
-        type = "success";
-        break;
-      case 3:
-        type = "danger";
-        break;
-      case 4:
-        type = "warning";
-        break;
-      case 5:
-        type = "info";
-        break;
-      default:
-        break;
-    }
-    var options = {};
-    options = {
-      place: place,
-      message: (
-        <div>
-          <div>
-            Welcome to <b>Paper Dashboard React</b> - a beautiful freebie for
-            every web developer.
-          </div>
-        </div>
-      ),
-      type: type,
-      icon: "nc-icon nc-bell-55",
-      autoDismiss: 7
-    };
-    this.notificationAlert.current.notificationAlert(options);
-  }
+	constructor(props) {
+		super(props)
+		this.bioInput = React.createRef()
+		this.fnInp = React.createRef()
+		this.lnInp = React.createRef()
+		this.uniInp = React.createRef()
+		this.cidInp = React.createRef()
+		this.emailInp = React.createRef()
+		this.langInp = React.createRef()
+		this.gitInp = React.createRef()
+		this.linkInp = React.createRef()
+		this.pronInp = React.createRef()
+		this.handleClick = this.handleClick.bind(this)
+		this.loadState = this.loadState.bind(this)
+		this.state = { bio: '', fn: "Jane", ln: "Doe", uni:'', cid: null, email:'', lang:'', git:'', link:'', pron:''}
+	}
+
+	async loadState(res) {
+		await this.setState({ bio: res.data.bio, fn: res.data.firstname, ln: res.data.surname, uni:'', cid: null, email:'', lang:'', git:'', link:'', pron:''})
+	}
+
+	async handleClick(event) {
+		console.log("Clicked button")
+		event.preventDefault()
+		//console.log(this.bioInput.current.value)
+		await this.setState({
+			bio: this.bioInput.current.value,
+			fn: this.fnInp.current.value,
+			ln: this.lnInp.current.value,
+			uni: this.uniInp.current.value,
+			cid: this.cidInp.current.value,
+			email: this.emailInp.current.value,
+			lang: this.langInp.current.value,
+			git: this.gitInp.current.value,
+			link: this.linkInp.current.value,
+			pron: this.pronInp.current.value
+		})
+
+		axios.post('https://awesomeapp.localtunnel.me/Sunny/newUser', {
+			bio: this.state.bio,
+			firstname: this.state.fn,
+			surname: this.state.ln,
+			photoURL: this.state.link
+		})
+		//console.log(this.state)
+	}
+
   render() {
     return (
       <>
         <div className="content">
-          <NotificationAlert ref={this.notificationAlert} />
           <Row>
+            
             <Col md="12">
-              <Card>
+              <Card className="card-user">
                 <CardHeader>
-                  <CardTitle tag="h5">Notifications</CardTitle>
-                  <p className="card-category">
-                    Handcrafted by our colleague{" "}
-                    <a
-                      target="_blank"
-                      href="https://www.instagram.com/manu.nazare/"
-                    >
-                      Nazare Emanuel-Ioan (Manu)
-                    </a>
-                    . Please checkout the{" "}
-                    <a
-                      href="https://github.com/creativetimofficial/react-notification-alert"
-                      target="_blank"
-                    >
-                      full documentation.
-                    </a>
-                  </p>
+                  <CardTitle tag="h5">Edit Profile</CardTitle>
                 </CardHeader>
                 <CardBody>
-                  <Row>
-                    <Col md="6">
-                      <Card className="card-plain">
-                        <CardHeader>
-                          <CardTitle tag="h5">Notifications Style</CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                          <Alert color="info">
-                            <span>This is a plain notification</span>
-                          </Alert>
-                          <UncontrolledAlert color="info" fade={false}>
-                            <span>
-                              This is a notification with close button.
-                            </span>
-                          </UncontrolledAlert>
-                          <UncontrolledAlert
-                            className="alert-with-icon"
-                            color="info"
-                            fade={false}
-                          >
-                            <span
-                              data-notify="icon"
-                              className="nc-icon nc-bell-55"
-                            />
-                            <span data-notify="message">
-                              This is a notification with close button and icon.
-                            </span>
-                          </UncontrolledAlert>
-                          <UncontrolledAlert
-                            className="alert-with-icon"
-                            color="info"
-                            fade={false}
-                          >
-                            <span
-                              data-notify="icon"
-                              className="nc-icon nc-chart-pie-36"
-                            />
-                            <span data-notify="message">
-                              This is a notification with close button and icon
-                              and have many lines. You can see that the icon and
-                              the close button are always vertically aligned.
-                              This is a beautiful notification. So you don't
-                              have to worry about the style.
-                            </span>
-                          </UncontrolledAlert>
-                        </CardBody>
-                      </Card>
-                    </Col>
-                    <Col md="6">
-                      <Card className="card-plain">
-                        <CardHeader>
-                          <CardTitle tag="h5">Notification states</CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                          <UncontrolledAlert color="primary" fade={false}>
-                            <span>
-                              <b>Primary - </b>
-                              This is a regular notification made with
-                              color="primary"
-                            </span>
-                          </UncontrolledAlert>
-                          <UncontrolledAlert color="info" fade={false}>
-                            <span>
-                              <b>Info - </b>
-                              This is a regular notification made with
-                              color="info"
-                            </span>
-                          </UncontrolledAlert>
-                          <UncontrolledAlert color="success" fade={false}>
-                            <span>
-                              <b>Success - </b>
-                              This is a regular notification made with
-                              color="success"
-                            </span>
-                          </UncontrolledAlert>
-                          <UncontrolledAlert color="warning" fade={false}>
-                            <span>
-                              <b>Warning - </b>
-                              This is a regular notification made with
-                              color="warning"
-                            </span>
-                          </UncontrolledAlert>
-                          <UncontrolledAlert color="danger" fade={false}>
-                            <span>
-                              <b>Danger - </b>
-                              This is a regular notification made with
-                              color="danger"
-                            </span>
-                          </UncontrolledAlert>
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-          <Row>
-            <Col md="12">
-              <Card>
-                <CardBody>
-                  <div className="places-buttons">
+                  <Form>
                     <Row>
-                      <Col className="ml-auto mr-auto text-center" md="6">
-                        <CardTitle tag="h4">Notifications Places</CardTitle>
-                        <p className="category">Click to view notifications</p>
+                      <Col className="pr-1" md="5">
+                        <FormGroup>
+                          <label>University</label>
+                          <Input
+														innerRef={this.uniInp}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="px-1" md="3">
+                        <FormGroup>
+                          <label>CID</label>
+                          <Input
+                            innerRef={this.cidInp}
+                            type="number"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="pl-1" md="4">
+                        <FormGroup>
+                          <label htmlFor="exampleInputEmail1">
+                            Email address
+                          </label>
+                          <Input innerRef={this.emailInp} type="email" />
+                        </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="ml-auto mr-auto" lg="8">
-                        <Row>
-                          <Col md="4">
-                            <Button
-                              block
-                              color="primary"
-                              onClick={() => this.notify("tl")}
-                            >
-                              Top Left
-                            </Button>
-                          </Col>
-                          <Col md="4">
-                            <Button
-                              block
-                              color="primary"
-                              onClick={() => this.notify("tc")}
-                            >
-                              Top Center
-                            </Button>
-                          </Col>
-                          <Col md="4">
-                            <Button
-                              block
-                              color="primary"
-                              onClick={() => this.notify("tr")}
-                            >
-                              Top Right
-                            </Button>
-                          </Col>
-                        </Row>
+                      <Col className="pr-1" md="6">
+                        <FormGroup>
+                          <label>First Name</label>
+                          <Input
+                            innerRef={this.fnInp}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="pl-1" md="6">
+                        <FormGroup>
+                          <label>Last Name</label>
+                          <Input
+                            innerRef={this.lnInp}
+                            type="text"
+                          />
+                        </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="ml-auto mr-auto" lg="8">
-                        <Row>
-                          <Col md="4">
-                            <Button
-                              block
-                              color="primary"
-                              onClick={() => this.notify("bl")}
-                            >
-                              Bottom Left
-                            </Button>
-                          </Col>
-                          <Col md="4">
-                            <Button
-                              block
-                              color="primary"
-                              onClick={() => this.notify("bc")}
-                            >
-                              Bottom Center
-                            </Button>
-                          </Col>
-                          <Col md="4">
-                            <Button
-                              block
-                              color="primary"
-                              onClick={() => this.notify("br")}
-                            >
-                              Bottom Right
-                            </Button>
-                          </Col>
-                        </Row>
+                      <Col md="12">
+                        <FormGroup>
+                          <label>(Programming) Languages</label>
+                          <Input
+                            innerRef={this.langInp}
+                            type="text"
+                          />
+                        </FormGroup>
                       </Col>
                     </Row>
-                  </div>
+                    <Row>
+                      <Col className="pr-1" md="4">
+                        <FormGroup>
+                          <label>Github</label>
+                          <Input
+                            innerRef={this.gitInp}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="px-1" md="4">
+                        <FormGroup>
+                          <label>LinkedIn (optional)</label>
+                          <Input
+                            innerRef={this.linkInp}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="pl-1" md="4">
+                        <FormGroup>
+                          <label>Pronouns</label>
+                          <Input innerRef={this.pronInp} type="text" />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md="12">
+                        <FormGroup>
+                          <label>About Me</label>
+                          <Input
+														innerRef={this.bioInput}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <div className="update ml-auto mr-auto">
+                        <Button
+                          className="btn-round"
+                          color="primary"
+                          type="submit"
+													onClick={this.handleClick}
+                        >
+                          Update Profile
+                        </Button>
+                      </div>
+                    </Row>
+                  </Form>
                 </CardBody>
               </Card>
             </Col>

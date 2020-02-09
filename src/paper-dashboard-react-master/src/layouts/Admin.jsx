@@ -19,7 +19,7 @@
 import React from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 import DemoNavbar from "components/Navbars/DemoNavbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -27,18 +27,27 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
 import routes from "routes.js";
-
+import Login from "../views/Login.jsx"
+import id from "../id.js"
 var ps;
+
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       backgroundColor: "black",
-      activeColor: "info"
+      activeColor: "info",
+      userID: ""
     };
     this.mainPanel = React.createRef();
+    this.setUserId = this.setUserId.bind(this)
   }
+  setUserId(newID){
+    this.setState(prevState => ({...prevState, userID: newID}));
+    
+  }
+
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(this.mainPanel.current);
@@ -64,6 +73,8 @@ class Dashboard extends React.Component {
     this.setState({ backgroundColor: color });
   };
   render() {
+      console.log(this.state.userID);
+
     return (
       <div className="wrapper">
         <Sidebar
@@ -76,10 +87,11 @@ class Dashboard extends React.Component {
           <DemoNavbar {...this.props} />
           <Switch>
             {routes.map((prop, key) => {
+            
               return (
                 <Route
                   path={prop.layout + prop.path}
-                  component={prop.component}
+                  component = { () => (React.createElement(prop.component, {setUserID: this.setUserId, userID: this.state.userID}))}
                   key={key}
                 />
               );

@@ -17,7 +17,7 @@
 
 */
 import React from "react";
-
+import axios from 'axios';
 // reactstrap components
 import {
   Button,
@@ -34,6 +34,60 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
+	constructor(props) {
+		super(props)
+		this.bioInput = React.createRef()
+		this.fnInp = React.createRef()
+		this.lnInp = React.createRef()
+		this.uniInp = React.createRef()
+		this.cidInp = React.createRef()
+		this.emailInp = React.createRef()
+		this.langInp = React.createRef()
+		this.gitInp = React.createRef()
+		this.linkInp = React.createRef()
+		this.pronInp = React.createRef()
+		this.handleClick = this.handleClick.bind(this)
+		this.loadState = this.loadState.bind(this)
+		this.state = { bio: '', fn: '', ln: '', uni:'', cid: null, email:'', lang:'', git:'', link:'', pron:''}
+		axios.get('https://awesomeapp.localtunnel.me/gro/4df6539ae90592692ccc9940/update_bio').then(res=>{
+			this.loadState(res)
+			//this.state = { bio: res.data[0].bio, fn: res.data[0].firstname, ln: res.data[0].lastname, uni:'', cid: null, email:'', lang:'', git:'', link:'', pron:''}
+			//this.handleClick = this.handleClick.bind(this)
+		})
+		//this.state = { bio: '', fn: '', ln: '', uni:'', cid: null, email:'', lang:'', git:'', link:'', pron:''}
+	}
+
+	async loadState(res) {
+		await this.setState({ bio: res.data.bio, fn: res.data.firstname, ln: res.data.surname, uni:'', cid: null, email:'', lang:'', git:'', link:'', pron:''})
+	}
+
+	async handleClick(event) {
+		console.log("Clicked button")
+		event.preventDefault()
+		//console.log(this.bioInput.current.value)
+		await this.setState({
+			bio: this.bioInput.current.value,
+			fn: this.fnInp.current.value,
+			ln: this.lnInp.current.value,
+			uni: this.uniInp.current.value,
+			cid: this.cidInp.current.value,
+			email: this.emailInp.current.value,
+			lang: this.langInp.current.value,
+			git: this.gitInp.current.value,
+			link: this.linkInp.current.value,
+			pron: this.pronInp.current.value
+		})
+		
+		axios.post('https://awesomeapp.localtunnel.me/gro/4df6539ae90592692ccc9940/update_bio', {
+			bio: this.state.bio,
+			firstname: this.state.fn,
+			surname: this.state.ln,
+			_id: "4df6539ae90592692ccc9940",
+			photoURL: this.state.link
+		})
+		//console.log(this.state)
+	}
+
   render() {
     return (
       <>
@@ -53,15 +107,14 @@ class User extends React.Component {
                       <img
                         alt="..."
                         className="avatar border-gray"
-                        src={require("assets/img/mike.jpg")}
+                        src={"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"}
                       />
-                      <h5 className="title">Chet Faker</h5>
+                      <h5 className="title">{this.state.fn} {this.state.ln}</h5>
                     </a>
-                    <p className="description">@chetfaker</p>
+                    <p className="description">@{this.state.cid}</p>
                   </div>
                   <p className="description text-center">
-                    "I like the way you work it <br />
-                    No diggity <br />I wanna bag it up"
+                    { this.state.bio }
                   </p>
                 </CardBody>
                 <CardFooter>
@@ -71,13 +124,13 @@ class User extends React.Component {
                       <Col className="ml-auto" lg="3" md="6" xs="6">
                         <h5>
                           12 <br />
-                          <small>Files</small>
+                          <small>Teams</small>
                         </h5>
                       </Col>
                       <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
                         <h5>
-                          2GB <br />
-                          <small>Used</small>
+                          4/5 <br />
+                          <small>Completed</small>
                         </h5>
                       </Col>
                       <Col className="mr-auto" lg="3">
@@ -92,7 +145,7 @@ class User extends React.Component {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h4">Team Members</CardTitle>
+                  <CardTitle tag="h4">Teams You're Part Of</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <ul className="list-unstyled team-members">
@@ -108,7 +161,7 @@ class User extends React.Component {
                           </div>
                         </Col>
                         <Col md="7" xs="7">
-                          DJ Khaled <br />
+                          ICHACK2020 <br />
                           <span className="text-muted">
                             <small>Offline</small>
                           </span>
@@ -197,22 +250,19 @@ class User extends React.Component {
                     <Row>
                       <Col className="pr-1" md="5">
                         <FormGroup>
-                          <label>Company (disabled)</label>
+                          <label>University</label>
                           <Input
-                            defaultValue="Creative Code Inc."
-                            disabled
-                            placeholder="Company"
+														innerRef={this.uniInp}
                             type="text"
                           />
                         </FormGroup>
                       </Col>
                       <Col className="px-1" md="3">
                         <FormGroup>
-                          <label>Username</label>
+                          <label>CID</label>
                           <Input
-                            defaultValue="michael23"
-                            placeholder="Username"
-                            type="text"
+                            innerRef={this.cidInp}
+                            type="number"
                           />
                         </FormGroup>
                       </Col>
@@ -221,7 +271,7 @@ class User extends React.Component {
                           <label htmlFor="exampleInputEmail1">
                             Email address
                           </label>
-                          <Input placeholder="Email" type="email" />
+                          <Input innerRef={this.emailInp} type="email" />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -230,8 +280,7 @@ class User extends React.Component {
                         <FormGroup>
                           <label>First Name</label>
                           <Input
-                            defaultValue="Chet"
-                            placeholder="Company"
+                            innerRef={this.fnInp}
                             type="text"
                           />
                         </FormGroup>
@@ -240,8 +289,7 @@ class User extends React.Component {
                         <FormGroup>
                           <label>Last Name</label>
                           <Input
-                            defaultValue="Faker"
-                            placeholder="Last Name"
+                            innerRef={this.lnInp}
                             type="text"
                           />
                         </FormGroup>
@@ -250,10 +298,9 @@ class User extends React.Component {
                     <Row>
                       <Col md="12">
                         <FormGroup>
-                          <label>Address</label>
+                          <label>(Programming) Languages</label>
                           <Input
-                            defaultValue="Melbourne, Australia"
-                            placeholder="Home Address"
+                            innerRef={this.langInp}
                             type="text"
                           />
                         </FormGroup>
@@ -262,28 +309,26 @@ class User extends React.Component {
                     <Row>
                       <Col className="pr-1" md="4">
                         <FormGroup>
-                          <label>City</label>
+                          <label>Github</label>
                           <Input
-                            defaultValue="Melbourne"
-                            placeholder="City"
+                            innerRef={this.gitInp}
                             type="text"
                           />
                         </FormGroup>
                       </Col>
                       <Col className="px-1" md="4">
                         <FormGroup>
-                          <label>Country</label>
+                          <label>LinkedIn (optional)</label>
                           <Input
-                            defaultValue="Australia"
-                            placeholder="Country"
+                            innerRef={this.linkInp}
                             type="text"
                           />
                         </FormGroup>
                       </Col>
                       <Col className="pl-1" md="4">
                         <FormGroup>
-                          <label>Postal Code</label>
-                          <Input placeholder="ZIP Code" type="number" />
+                          <label>Pronouns</label>
+                          <Input innerRef={this.pronInp} type="text" />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -292,8 +337,8 @@ class User extends React.Component {
                         <FormGroup>
                           <label>About Me</label>
                           <Input
-                            type="textarea"
-                            defaultValue="Oh so, your weak rhyme You doubt I'll bother, reading into it"
+														innerRef={this.bioInput}
+                            type="text"
                           />
                         </FormGroup>
                       </Col>
@@ -304,6 +349,7 @@ class User extends React.Component {
                           className="btn-round"
                           color="primary"
                           type="submit"
+													onClick={this.handleClick}
                         >
                           Update Profile
                         </Button>
