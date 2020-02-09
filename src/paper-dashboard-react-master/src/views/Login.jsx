@@ -59,6 +59,7 @@ class Login extends React.Component {
         event.preventDefault()
         console.log("in click")
         await this.setState({logins: this.loginInp.current.value})
+        await this.setState({passwords: this.passInp.current.value})
 
         axios.get("https://awesomeapp.localtunnel.me/gro/login", 
         {params: {firstname: this.state.logins, lastname: this.state.passwords}})
