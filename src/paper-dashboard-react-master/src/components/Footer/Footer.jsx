@@ -5,11 +5,11 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Copyright 2019 Us (https://www.creative-tim.com)
 
 * Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Us
 
 =========================================================
 
@@ -34,7 +34,7 @@ class Footer extends React.Component {
               <ul>
                 <li>
                   <a href="https://www.creative-tim.com" target="_blank">
-                    Creative Tim
+                    Us
                   </a>
                 </li>
                 <li>
@@ -55,7 +55,7 @@ class Footer extends React.Component {
             <div className="credits ml-auto">
               <div className="copyright">
                 &copy; {1900 + new Date().getYear()}, made with{" "}
-                <i className="fa fa-heart heart" /> by Creative Tim
+                <i className="fa fa-heart heart" /> by Us
               </div>
             </div>
           </Row>

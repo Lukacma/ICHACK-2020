@@ -53,8 +53,9 @@ class Dashboard extends React.Component {
     fetchUsers = (localID) => {
         axios.get("https://awesomeapp.localtunnel.me/gro/list", {params: {myID: localID}})
         .then((response) => {
-            this.setState({users: response.data.filter((item) => {return item._id != localID})})
-        });
+            console.log(JSON.stringify(response.data[5].userID[0]._id))
+            console.log(localID)
+            this.setState({users: response.data})        });
         
     }
     pressLike(localID, remoteID, channel) {
